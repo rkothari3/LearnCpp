@@ -1,16 +1,10 @@
-#include <iostream>
-#include <vector>
-#include <string>
-
-using namespace std;
+#include <iostream> // C++ library for input/output from/to console.
 
 int main()
 {
-    vector<string> msg {"Hello", "C++", "World", "from", "VS Code", "and the C++ extension!"};
-
-    for (const string& word : msg)
-    {
-        cout << word << " ";
-    }
-    cout << endl;
+    /*
+    std::cout (which stands for “character output”) and the << operator allow us to display information on the console. 
+    */
+    std::cout << "Hello world!";
+    return 0;
 }
