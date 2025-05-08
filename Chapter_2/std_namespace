@@ -1,0 +1,11 @@
+#include <iostream>
+
+using namespace std; // this is a using-directive that allows us to access names in the std namespace with no namespace prefix
+
+int main()
+{
+    cout << "Hello world!"; // we no longer have to use std::cout
+    return 0;
+}
+
+// BEST PRACTICE: Avoid using-directives with std because they violate the reason why namespaces were added in the first place.

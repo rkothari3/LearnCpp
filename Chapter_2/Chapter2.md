@@ -120,3 +120,153 @@ int main()
 In the example:
 - The return value of `getValueFromUser()` is stored in a temporary, which is then passed to `std::cout`. The temporary is destroyed after the output statement.
 
+### Forward Declarations
+
+- When we call a function before we have defined it, it results in a compilation error.
+- There's two ways to resolve this: 1. Move up the function called. **2. Use Forward Declaration**.
+
+Example:
+
+```cpp
+#include <iostream>
+
+int add(int x, int y); // forward declaration of add() 
+
+int main() 
+{
+    std::cout << "The sum of 3 and 4 is: " << add(3, 4) << 'n';
+    // This no longer results in compilation error.
+    return 0;
+}
+// If the declaration isn't defined correct, the compiler won't link it correctly, resulting in error.
+int add(int x, int y)
+{
+    return x + y;
+}
+```
+
+### Naming Collisions
+
+- Occur when two things happen to have the same name in your code. 
+- There are multiple ways to overcome this shortcoming.
+    - Scope regions. Ex: You can have same name varibale in two different functions without resulting in naming collisions.
+    - Namespaces: groups related names together so they don't conflict with names in other namespaces.
+    - Curly Braces and indentation: Curly braces {} create new scope regions. Variables declared inside braces only exist there. Indenting code inside braces makes it easier to read and shows what's inside each scope.
+
+### Pre-Processor
+
+- A program that runs before the actual compilation of C++ code. 
+- Scans your file looking for preprocessor directives. These diectives are instructions that begin a # symbol. Commonly used to handle directives like #include.
+- When the preprocessor encounters #include <filename>, it replaces that line with the entire content of the specified file. This is commonly used to include header files (like <iostream>) which contain declarations for functions and objects.
+- Also used in #define directive. This creates a macro, which is a rule for converting input text into replacement output text.
+    - Object-like macros:
+    ```cpp
+    #define MY_NAME "Alex"
+    // In the code, MY_NAME will be replaced by "Alex"
+    std::cout << "My name is: " << MY_NAME << '\n'; 
+    // Becomes std::cout << "My name is: " << "Alex" << '\n';
+    ```
+- Conditional Compilation preprocessor directives allow you to specify under what conditions something will or won't compile. Common ones include: #ifdef, #ifndef, and #endif.
+
+### Header Files
+
+Here's our completed header file:
+
+add.h:
+
+```cpp
+// We really should have a header guard here, but will omit it for simplicity (we'll cover header guards in the next lesson)
+
+// This is the content of the .h file, which is where the declarations go
+int add(int x, int y); // function prototype for add.h -- don't forget the semicolon!
+```
+
+In order to use this header file in main.cpp, we have to #include it (using quotes, not angle brackets).
+
+main.cpp:
+
+```cpp
+#include "add.h" // Insert contents of add.h at this point.  Note use of double quotes here.
+#include <iostream>
+
+int main()
+{
+    std::cout << "The sum of 3 and 4 is " << add(3, 4) << '\n';
+    return 0;
+}
+```
+
+add.cpp:
+
+```cpp
+#include "add.h" // Insert contents of add.h at this point.  Note use of double quotes here.
+
+int add(int x, int y)
+{
+    return x + y;
+}
+```
+
+### Header Files (.h, .hpp)
+
+Header files are used in C++ to share declarations, like function prototypes, across multiple code files (.cpp). This avoids repeating these declarations manually in every file that needs them. When you use `#include <filename>` or `#include "filename"`, the preprocessor copies the entire content of the specified header file into your current file at that location. Use angle brackets (`< >`) for standard library headers (e.g., `<iostream>`) and double quotes (`" "`) for your own custom header files (e.g., `"myfunctions.h"`).
+
+#### Best Practices
+
+- Place only declarations (not definitions like full function bodies or global variable initializations) in header files to avoid errors related to the "one-definition rule" (ODR).
+- Name header files to correspond with their associated source file (e.g., `utils.h` for `utils.cpp`).
+- Have each `.cpp` file include its paired header file first.
+- Explicitly include every header file that your code directly uses, rather than relying on it being included indirectly by another header.
+- Avoid the inclusion of `.cpp` files.
+
+### Header Guards
+
+Header guards are crucial for preventing problems that arise when the same header file is included multiple times within a single `.cpp` file (often due to nested includes). If a header file were included multiple times without guards, any definitions or type declarations within it would be duplicated, leading to compilation errors.
+
+#### Implementation
+
+1. **Traditional Preprocessor Directives**: Wrap the header's content with `#ifndef`, `#define`, and `#endif`. Use a unique name (conventionally the header's filename in uppercase with underscores, e.g., `MY_HEADER_H`) to ensure the content is processed only once per file.
+
+    ```cpp
+    #ifndef MY_HEADER_H
+    #define MY_HEADER_H
+    // Content of the header file
+    #endif
+    ```
+
+2. **`#pragma once`**: A simpler, non-standard but widely supported directive that instructs the compiler to include the header file only once.
+
+    ```cpp
+    #pragma once
+    // Content of the header file
+    ```
+
+Header guards ensure that declarations and certain types of definitions (like class definitions or templates, which can safely reside in headers) are processed only once per compilation unit, even if the header is included multiple times directly or indirectly.
+
+### How to Design Your First Programs
+
+Effective program design involves planning before writing code. This approach helps in creating more manageable and robust software.
+
+#### Design Steps
+
+1. **Define the Goal**: Clearly state what the program is intended to do.
+2. **Define Requirements**: List necessary features, constraints, and capabilities.
+3. **Define Tools, Targets, and Backup Plan**: Consider the environment, tools (like IDEs), and always plan for code backup (version control systems like Git are recommended).
+4. **Break Down Problems**: Decompose complex tasks into smaller, simpler sub-tasks. This hierarchy can map to functions within your program.
+5. **Sequence Events**: Determine the order in which tasks or operations should occur.
+
+#### Implementation Steps
+
+1. **Outline `main()`**: Use the task sequence to sketch out the `main` function, often using comments or placeholder function calls initially.
+2. **Implement Functions**: Develop each function individually, defining its inputs/outputs, writing its code, and testing it.
+3. **Final Testing**: Thoroughly test the entire program once all parts are integrated.
+
+#### Key Advice
+
+- Start with simple goals and add features incrementally.
+- Focus on one part of the program at a time.
+- Test code frequently as you write it.
+- Prioritize getting features working before perfecting code.
+- Optimize for code maintainability rather than premature performance optimization.
+
+
