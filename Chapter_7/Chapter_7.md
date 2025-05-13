@@ -156,3 +156,48 @@ int main() {
   std::cout << x << " " << ::x; // “8 4”
 }
 ```
+
+### Internal vs. External Linkage
+- Note: Linkage is not the same as scope.
+- Scope: region of the program where an identifier can be accessed. It is a compile-time concept.
+    - Ex: block scope, function scope, file scope, class scope.
+- Linkage: determines whether the same identifier in different scopes refers to the same entity. It is a compile-time and link-time concept.
+    - Internal linkage: a variable or function accessible only within the file it is defined.
+        - To make a non-constant global variable internal, we use the static keyword. Const and constexpr are internal linkage by default.
+        - Functions although default to external linkage, they can be made internal by adding the static keyword.
+        - Useful for local helper variables and functions.
+    - External Linkage: a variable or function accesible in multiple files.
+        - Done using a extern keyword.
+        - Global shared rss. 
+
+```cpp
+// file1.cpp
+#include <iostream>
+
+// Definition of a non-const global variable.
+// Non-const globals have external linkage by default.
+int g_count = 10;
+
+// Optional: A function to modify g_count.
+void increment() {
+    ++g_count;
+}
+
+// file2.cpp
+#include <iostream>
+
+// Forward declaration of the external variable.
+// This tells the compiler that g_count is defined elsewhere.
+extern int g_count;
+
+// Forward declaration of the function defined in file1.cpp
+void increment();
+
+int main() {
+    std::cout << "Initial count: " << g_count << '\n';  // prints 10
+    increment();
+    std::cout << "After increment: " << g_count << '\n'; // prints 11
+    return 0;
+}
+
+```
