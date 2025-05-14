@@ -93,7 +93,7 @@ int main()
     return 0;
 }
 ```
-- Created when the program starts, and destroyed after the main block.
+- Created when the program starts, and destroyed after the main block. Meaning they have static duration.
 - Best practice: Consider using a “g” or “g_” prefix when naming global variables (especially those defined in the global namespace), to help differentiate them from local variables and function parameters.
 
 - Constand global variables:
@@ -201,3 +201,121 @@ int main() {
 }
 
 ```
+
+### Static Local Variables
+- When applied to a global variable, the static keyword defines the global variable as having internal linkage, meaning the variable cannot be exported to other files.
+- When applied to a local variable, the static keyword defines the local variable as having static duration, meaning the variable will only be created once, and will not be destroyed until the end of the program.
+
+### Summary
+
+### Variable Types Summary
+
+| Type | Example | Scope | Duration | Linkage | Notes |
+|------|---------|-------|----------|---------|-------|
+| Local variable | int x; | Block | Automatic | None | |
+| Static local variable | static int s_x; | Block | Static | None | |
+| Dynamic local variable | int* x { new int{} }; | Block | Dynamic | None | |
+| Function parameter | void foo(int x) | Block | Automatic | None | |
+| Internal non-const global variable | static int g_x; | Global | Static | Internal | Initialized or uninitialized |
+| External non-const global variable | int g_x; | Global | Static | External | Initialized or uninitialized |
+| Inline non-const global variable (C++17) | inline int g_x; | Global | Static | External | Initialized or uninitialized |
+| Internal constant global variable | constexpr int g_x { 1 }; | Global | Static | Internal | Must be initialized |
+| External constant global variable | extern const int g_x { 1 }; | Global | Static | External | Must be initialized |
+| Inline constant global variable (C++17) | inline constexpr int g_x { 1 }; | Global | Static | External | Must be initialized |
+
+
+### Unamed (Anonymous) Namespaces
+- namespace without a name. Everything inside only accessible within the same src file.
+- Use unnamed namespaces for file-local code, but never in header files, as this may cause multiple definitions and linkage errors.
+```cpp
+#include <iostream>
+
+namespace // unnamed namespace
+{
+    void doSomething() // only accessible in this file
+    {
+        std::cout << "v1\n";
+    }
+}
+
+int main()
+{
+    doSomething(); // OK: accessible here
+    return 0;
+}
+
+```
+
+### Inline Namespaces
+- named namespace declared with the inline keyword.
+- typically used for versioning code, letting you provide different versions of functions or types without breaking old code
+```cpp
+#include <iostream>
+
+inline namespace V1 // inline namespace
+{
+    void doSomething()
+    {
+        std::cout << "V1\n";
+    }
+}
+
+namespace V2 // normal namespace
+{
+    void doSomething()
+    {
+        std::cout << "V2\n";
+    }
+}
+
+int main()
+{
+    V1::doSomething(); // Calls V1 version
+    V2::doSomething(); // Calls V2 version
+    doSomething();     // Calls the inline version (V1)
+    return 0;
+}
+
+// NOTE: If u want V2 to be the defaut, make V2 the inline namespace
+```
+
+### Mixing Inline and Unnamed Namespaces
+- You can combine both, but it’s usually clearer to nest an unnamed namespace inside an inline namespace. This way, you get internal linkage (file-local visibility) and versioning
+```cpp
+#include <iostream>
+
+namespace V1
+{
+    void doSomething() { std::cout << "V1\n"; }
+}
+
+inline namespace V2
+{
+    namespace // unnamed namespace
+    {
+        void doSomething() // internal linkage
+        {
+            std::cout << "V2\n";
+        }
+    }
+}
+
+int main()
+{
+    V1::doSomething(); // V1
+    V2::doSomething(); // V2
+    doSomething();     // V2 (inline version)
+    return 0;
+}
+
+```
+
+Recap:
+- Unnamed namespaces: Use for file-local code; avoid in headers.
+- Inline namespaces: Use for versioning APIs/libraries; does not affect linkage.
+- Mixing: Nest unnamed inside inline for versioned, file-local code.
+
+
+# Qualified and unqualified names
+- A qualified name is a name that includes an associated scope (e.g. std::string). An unqualified name is a name that does not include a scoping qualifier (e.g. string).
+
