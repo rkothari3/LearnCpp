@@ -72,3 +72,65 @@ int main()
     return 0;
 }
 ```
+### Default Arguments
+- Default arguments are values that are automatically passed to a function if the caller does not provide them.
+```cpp
+#include <iostream>
+
+void print(int x=10, int y=20, int z=30)
+{
+    std::cout << "Values: " << x << " " << y << " " << z << '\n';
+}
+
+int main()
+{
+    print(1, 2, 3); // all explicit arguments
+    print(1, 2); // rightmost argument defaulted
+    print(1); // two rightmost arguments defaulted
+    print(); // all arguments defaulted
+
+    return 0;
+}
+/*
+Output:
+Values: 1 2 3
+Values: 1 2 30
+Values: 1 20 30
+Values: 10 20 30
+*/
+```cpp
+- Default arguments with Forward declaration
+```cpp
+#include <iostream>
+
+void print(int x, int y); // forward declaration, no default argument
+
+int main()
+{
+    print(3); // compile error: default argument for y hasn't been defined yet
+
+    return 0;
+}
+
+void print(int x, int y=4)
+{
+    std::cout << "x: " << x << '\n';
+    std::cout << "y: " << y << '\n';
+}
+```
+- Default arguments with Function Overloading:
+```cpp
+#include <iostream>
+void print(int x, int y=4) {
+    std::cout << "x: " << x << '\n';
+    std::cout << "y: " << y << '\n';
+}
+void print(double x, double y=4.0) {
+    std::cout << "x: " << x << '\n';
+    std::cout << "y: " << y << '\n';
+}
+int main() {
+    print(3); // calls print(int, int)
+    print(3.5); // calls print(double, double)
+    return 0;
+}
