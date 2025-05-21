@@ -134,3 +134,62 @@ int main() {
     print(3.5); // calls print(double, double)
     return 0;
 }
+```
+
+### Templates
+- Templates allow you to write generic and reusable code. They can be used with functions and classes.
+```cpp
+#include <iostream>
+template <typename T>
+T add(T x, T y) {
+    return x + y;
+}
+int main() {
+    std::cout << add(1, 2) << '\n';        // calls add<int>(int, int), prints 3
+    std::cout << add(1.2, 3.4) << '\n';    // calls add<double>(double, double), prints 4.6
+    return 0;
+}
+```
+*Function Template Instantiation*
+```cpp
+template <typename T>
+T square(T x) {
+    return x * x;
+}
+
+int main() {
+    cout << square<int>(5) << endl;     // Explicit instantiation
+    cout << square(3.5) << endl;        // Implicit instantiation
+}
+```
+*Function Templates with Multiple Template Types*
+```cpp
+#include <iostream>
+using namespace std;
+
+template <typename T1, typename T2>
+void displayPair(T1 a, T2 b) {
+    cout << "First: " << a << ", Second: " << b << endl;
+}
+
+int main() {
+    displayPair(5, 3.14);          // int and double
+    displayPair("Age", 25);        // const char* and int
+}
+```
+*Non-Type Template Parameter*
+```cpp
+#include <iostream>
+using namespace std;
+template <typename T, int size>
+class Array {
+public:
+    Array() {
+        cout << "Array of size " << size << " created." << endl;
+    }
+};
+int main() {
+    Array<int, 5> intArray;         // Array of size 5
+    Array<double, 10> doubleArray;  // Array of size 10
+}
+```
