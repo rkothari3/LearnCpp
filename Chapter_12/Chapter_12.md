@@ -71,3 +71,53 @@ The address of the reference parameter is: 0x7ffd16574de0
 - You can also use pass by ref to modify the original variable inside a function. Not smth u could do with pass-by-value, becaue the arg and param are diff objects.
 
 - *LIMITATION*: Can only pass modifiable Lvalues to non-const ref. params.
+
+### What is const lvalue reference?
+A const reference can refer to:
+- modifiable variables
+- constants
+- temporary values (rvalues) like literals (5, 'A', etc.)
+
+#### Why use const reference?
+- Avoids copying the argument (saves memory/time).
+- Guarantees the function won't change the argument.
+- Can accept more types of values than non-const references.
+
+#### When to use it?
+Use const reference for:
+- Large objects (like std::string, custom classes).
+- When you don't want to modify the original data.
+- Use non-const reference only if the function needs to change the value.
+
+#### What about temporary values (rvalues)?
+- const references can bind to temporaries.
+- Example: `printRef(5);` is okay if printRef takes a `const int&`.
+
+#### Type conversion with const references
+- A const reference can bind to a different but convertible type (e.g., int to double).
+- Creates a temporary of the expected type.
+- This might make an unwanted copy, so be cautious.
+
+#### Mixing value and reference parameters
+You can mix them in one function:
+```cpp
+void func(int a, int& b, const std::string& c);
+```
+
+#### Rule of thumb:
+- 📦 Fundamental types (int, char, double): Pass by value (cheap to copy).
+- 📦 Class types (like std::string, std::vector): Pass by const reference (can be expensive to copy).
+- ❓ Not sure? Use const reference – it's safer and usually better.
+
+#### Is copying always bad?
+No, sometimes copying is faster to access and easier to optimize than reference (depends on object size and type).
+
+#### Cheap to copy = good to pass by value
+A type is cheap to copy if:
+- Size is less than or equal to 2 pointers.
+- It has no setup cost (like memory allocation, file handling).
+
+#### Special case: std::string_view
+Prefer std::string_view over const std::string&:
+- It accepts both std::string and C-style strings ("hello").
+- No copying needed, even for substrings.
