@@ -32,5 +32,6 @@ int main()
 	std::cout << sizeof(ptr) << '\n'; // 8
 	std::cout << sizeof(*ptr) << '\n'; // 2
 
+
 	return 0;
 }
