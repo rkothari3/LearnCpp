@@ -29,8 +29,8 @@ int main()
 	std::cout << *ptr << '\n'; // 3
 	std::cout << '\n';
 
-	std::cout << sizeof(ptr) << '\n';
-	std::cout << sizeof(*ptr) << '\n';
+	std::cout << sizeof(ptr) << '\n'; // 8
+	std::cout << sizeof(*ptr) << '\n'; // 2
 
 	return 0;
 }
