@@ -157,3 +157,41 @@ Similar concepts apply to what a function returns:
 
 **Return by Address (type*):** Returns a pointer to an existing object. The caller needs to handle the pointer (and potentially check for nullptr).
 
+### In and out parameters
+#### In Parameters
+- Parameters that are used only for receiving input from the caller are sometimes called in parameters.
+#### Out Parameters
+- Paramters that are used for the purpose of returning info back to tha caller are called out parameters. These are ususally non-const references that allow the function to modify the value of an object passed as an argument. NOTE: Refer to the Out Parameter example.
+- BEST PRACTICES: Out params are not reccomended.
+
+
+### Type deduction with pointers, refs., and const
+- By default auto (which is used to deduce types) drops consts and references (&).
+```cpp
+#include <iostream>
+
+int main()
+{
+    // Dropping const (Same case for constexpr)
+    const int x{3};
+    auto y {x}; // -> Const dropped; y is int
+    const auto y{x}; // Const double
+
+    // Dropping references
+    std::string& getref();
+    auto ref { getref() }; // -> Ref. dropped; ref is std::string
+    auto& ref {getref()}; // ref is std::string&
+    
+    // Pointers are not dropped during type deduction
+    int& y = x;
+    auto c = y;           // int (reference dropped)
+    auto& d = y;          // int&
+
+    const int* p = &x;
+    auto e = p;           // const int* (pointer not dropped)
+    auto* f = p;          // const int* (pointer not dropped)
+    const auto* g = p;    // const int* (pointer to const)
+    auto* const h = p;    // const int* const (const pointer)
+}
+```
+
