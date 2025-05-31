@@ -111,3 +111,56 @@ int main()
 
     ptr2 = nullptr; // Assignment ptr2 to make the pointer a nullptr
 }
+```
+- Dereferencing a null pointer would result in unexpected behavior
+
+### Const vs. Non-const pointers and values
+1. non-const ptr to non-const value
+    - You can change both what it points to and the address
+2. Pointer to const (const value, non-const pointer)
+    ```cpp
+    // Change the address it points to but not the value
+    #include <iostream>
+
+    int main()
+    {
+        const int x{5}
+        const int* ptr1 {&x}
+        // NOTE: the pointer here is not const, rather the type of values it can point to are const.
+
+        // Can modify address, but not the value
+        const int y{6}
+
+        ptr1 = &y; // Valid
+        *ptr1 = 10; // Invalid -> Error
+    }
+    ```
+3. Const Pointer (const pointer, non-const value)
+    - Can change value, but not the address
+    ```cpp
+    #include <iostream>
+    
+    int main()
+    {
+        int x{5};
+        int* const ptr2{&x};
+
+        int y{6};
+        ptr2 = &y; // Not possible
+        *ptr2 = 10; // Allowed
+    }
+    ```
+4. Const Pointer to Const Value
+    - Can neither change the value nor the address
+    ```cpp
+    #include <iostream>
+
+    int main()
+    {
+        const int x {5};
+
+        const int* const ptr {&x};
+
+        *ptr = 10; // Error
+        ptr = &x;  // Error  
+    }
