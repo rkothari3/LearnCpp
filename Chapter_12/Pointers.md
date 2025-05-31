@@ -81,3 +81,33 @@ int main()
     return 0;
 }
 ```
+
+### Null Pointers
+```cpp
+#include <iostream>
+
+int main()
+{
+    int* ptr {};
+
+    int x {5};
+
+    ptr = &x;
+
+    std::cout << *ptr << '\n';
+}
+```
+- Use the nullptr keyword for intialization, assignment, or passing a null pointer to a function.
+```cpp
+#include <iostream>
+
+int main()
+{
+    int* ptr {nullptr}; // Explicit intialize nullptr
+
+    int value {5};
+
+    int* ptr2 {&value}; // ptr2 is valid ptr
+
+    ptr2 = nullptr; // Assignment ptr2 to make the pointer a nullptr
+}

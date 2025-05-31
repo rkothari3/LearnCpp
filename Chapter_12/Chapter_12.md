@@ -121,3 +121,39 @@ A type is cheap to copy if:
 Prefer std::string_view over const std::string&:
 - It accepts both std::string and C-style strings ("hello").
 - No copying needed, even for substrings.
+
+
+
+### Pass by Value/Ref./Address
+#### Pass by Value
+- A copy of the arg is created and passed into the function
+- Changes made inside the function dont affect the original arg.
+
+#### Pass by Reference
+- The Function recieves a ref to the original arg. 
+- Unlike pass by val, changes inside the func. here do affect the original arg.
+- Uses & in the function parameter type.
+
+#### Pass by Address
+- Function recieves the memory address of the arg (using a pointer).
+- Changes made by deref the pointer do affect the original arg.
+- Uses * in the function param type and & when calling the function.
+
+#### When to Use Which:
+
+**Pass by Value:** When you don't want the function to modify the original and the data is cheap to copy.
+
+**Pass by Reference:** When you want the function to potentially modify the original and avoid the cost of copying (especially for large objects). Also, references cannot be null.
+
+**Pass by Address:** Similar to pass by reference for modification and avoiding copies, but it allows for the possibility of a null pointer. Often used when an argument might be "optional" (by passing nullptr).
+
+### Return by Reference and Return by Address
+
+Similar concepts apply to what a function returns:
+
+**Return by Value:** Returns a copy.
+
+**Return by Reference (type&):** Returns a reference to an existing object. Be careful not to return a reference to a local variable that will be destroyed when the function ends!
+
+**Return by Address (type*):** Returns a pointer to an existing object. The caller needs to handle the pointer (and potentially check for nullptr).
+
