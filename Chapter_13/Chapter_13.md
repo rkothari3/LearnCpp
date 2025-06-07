@@ -204,3 +204,12 @@ int main()
     return 0;
 }
 ```
+### Struct aggregate intialization
+- NOTE: struct members are not initialized by default.
+- In C++, an aggregate is a specific type of data structure that has no user-defined constructors, no private or protected non-static data members, no base classes, and no virtual functions.
+- Structs with only public data members are considered aggregates. Thus, they can be initialized using aggregate initialization.
+
+- Forms of agregate initialization:
+    -  Copy-list initialization: Employee frank = { 1, 32, 60000.0 };
+    - List initialization (preferred): Employee joe { 2, 28, 45000.0 };
+    - Direct initialization with parentheses (C++20): Employee robert(3, 45, 62500.0);
