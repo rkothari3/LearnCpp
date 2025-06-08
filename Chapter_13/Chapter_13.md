@@ -210,6 +210,82 @@ int main()
 - Structs with only public data members are considered aggregates. Thus, they can be initialized using aggregate initialization.
 
 - Forms of agregate initialization:
-    -  Copy-list initialization: Employee frank = { 1, 32, 60000.0 };
+    - Copy-list initialization: Employee frank = { 1, 32, 60000.0 };
     - List initialization (preferred): Employee joe { 2, 28, 45000.0 };
     - Direct initialization with parentheses (C++20): Employee robert(3, 45, 62500.0);
+
+
+### Passing and returning structs
+- Refer to structs_2.cpp for details.
+
+
+### Nested structs
+- Refer to nested_structs.cpp for details.
+
+
+### Ownership: Owners vs. Viewers
+- Owners manage their own data (e.g., std::string), while viewers just point to data owned elsewhere (e.g., std::string_view, pointers, references).
+
+- We prefer owners because data members are valid as long as the struct exists, and data doesn't unexpectedly change.
+
+```cpp
+#include <iostream>
+#include <string>
+#include <string_view>
+
+struct Owner
+{
+    std::string name; // Owner
+};
+
+struct Viewer
+{
+    std::string_view name; // Viewer
+};
+
+std::string getName()
+{
+    std::cout << "Enter a name: ";
+    std::string name;
+    std::cin >> name;
+    return name;
+}
+
+int main()
+{
+    Owner o { getName() };  // Safe: makes a copy
+    std::cout << "The owner's name is " << o.name << '\n';
+
+    Viewer v { getName() }; // DANGEROUS: v.name dangles!
+    std::cout << "The viewer's name is " << v.name << '\n'; // Undefined behavior
+
+    return 0;
+}
+```
+
+
+### Accessing members with pointers
+- Pointers are variables that stores address of another variable. You cannot use the dot operator to access members of a struct through a pointer.
+- C++ provides the arrow operator (->) to access members of a struct through a pointer.
+
+```cpp
+#include <iostream>
+struct Employee
+{
+    int id {};
+    int age {};
+    double wage {};
+};
+int main()
+{
+    Employee joe { 1, 32, 60000.0 };
+    Employee* ptr = &joe; // Pointer to joe
+
+    // Accessing members using the arrow operator
+    std::cout << "Joe's ID: " << ptr->id << '\n';
+    std::cout << "Joe's Age: " << ptr->age << '\n';
+    std::cout << "Joe's Wage: " << ptr->wage << '\n';
+
+    return 0;
+}
+```
