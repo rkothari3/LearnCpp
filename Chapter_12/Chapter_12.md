@@ -1,4 +1,4 @@
-# Compound Types: References and Pointers
+# Compound Types: References and Pointers 
 ### Lvalues and Rvalues
 | Expression      | Description                                                   |
 | --------------- | ------------------------------------------------------------- |
